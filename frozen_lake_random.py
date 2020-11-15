@@ -24,6 +24,7 @@ def run_episode(env, policy):
     while not is_done:
         action = policy[state].item() #.item() takes scalar value from tensor
         new_state, reward, is_done, info = env.step(action)
+        state = new_state # we need to choose correct action on next iteration!!!!!!!
         total_reward += reward
         if is_done:
             break
