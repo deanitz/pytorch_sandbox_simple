@@ -99,9 +99,11 @@ def run_episode(env, policy):
             break
     return total_reward
 
-env = gym.make('FrozenLake-v0')
+env = gym.make('FrozenLake-v0', map_name="8x8", is_slippery = True)
+env.render()
 
-gammas = [0, 0.1, 0.2, 0.4, 0.8, 0.99, 1]
+# gammas = [0, 0.1, 0.2, 0.4, 0.8, 0.99, 1]
+gammas = [ 0.1, 0.99 ]
 avg_reward_gamma = []
 threshold = 0.0001
 n_episode = 10000
