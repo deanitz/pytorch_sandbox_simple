@@ -45,4 +45,12 @@ e_greedy = generate_e_greedy_policy(n_action, epsilon)
 
 optimal_Q, optimal_policy = q_learning(env, gamma, n_episode, alpha)
 print('optimal_policy')
-print(optimal_policy)
+
+for row in range(4):
+    print('\n')
+    for col in range(12):
+        index = row * 12 + col
+        action = optimal_policy.get(index)
+        if action is None:
+            action = 'x'
+        print('{:2}: {}'.format(index, action), end=' |')
