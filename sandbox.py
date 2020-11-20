@@ -5,7 +5,7 @@ import os
 
 clear = lambda: print("\033c")
 
-env = gym.make('SpaceInvaders-v0')
+env = gym.make('SpaceInvaders-ram-v0')
 env.reset()
 
 is_done = False
