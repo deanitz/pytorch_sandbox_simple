@@ -1,12 +1,24 @@
-import torch
-import matplotlib.pyplot as plt
 from collections import defaultdict
-from windy_gridworld import WindyGridwoldEnv
-
-env = WindyGridwoldEnv()
+import torch
+import gym
+env = gym.make('Taxi-v3')
 
 env.reset()
 env.render()
+
+n_action = env.action_space.n
+n_state = env.observation_space.n
+
+print(n_action)
+print(n_state)
+
+n_episode = 1000
+episode_reward = [0] * n_episode
+episode_length = [0] * n_episode
+
+gamma = 0.8
+alpha = 0.5
+epsilon = 0.01
 
 def generate_e_greedy_policy(n_action, epsilon):
     def policy_function(state, Q):
@@ -59,7 +71,7 @@ def sarsa_learning(env, gamma, n_episode, alpha):
             Q[state][action] += alpha * td_delta
             episode_length[episode] += 1
             episode_reward[episode] += reward
-            if is_done:
+            if is_done or episode_reward[episode] < -200: # added exit on big fail:
                 break
             state = next_state
             action = next_action
@@ -70,36 +82,19 @@ def sarsa_learning(env, gamma, n_episode, alpha):
 
     return Q, policy
 
-
-
-
-
-n_episode = 1000
-episode_reward = [0] * n_episode
-episode_length = [0] * n_episode
-
-gamma = 1
-alpha = 0.4
-epsilon = 0.1
-n_action = env.action_space.n
 e_greedy = generate_e_greedy_policy(n_action, epsilon)
 
-optimal_Q, optimal_policy = q_learning(env, gamma, n_episode, alpha)
-print('optimal_policy')
+optimal_Q, optimal_policy = sarsa_learning(env, gamma, n_episode, alpha)
 
-shape = (7, 10)
-for row in range(shape[0]):
-    print()
-    for col in range(shape[1]):
-        index = row * shape[1] + col
-        action = optimal_policy.get(index)
-        if action is None:
-            action = 'x'
-        else:
-            action = '↑→↓←'[action]
-        #print('{:2}: {}'.format(index, action), end=' |')
-        print(action, end='  ')
+# demo
+state = env.reset()
+is_done = False
+while not is_done:
+    action = optimal_policy[state]
+    state, reward, is_done, info = env.step(action)
+    env.render()
 
+import matplotlib.pyplot as plt
 plt.plot(episode_length)
 plt.title('Episode length')
 plt.xlabel('Episode')
