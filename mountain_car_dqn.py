@@ -22,18 +22,18 @@ def modify_reward(reward):
     if reward >= 0.5:
         mod_reward += 100
     elif reward >= 0.25:
-        mod_reward += 10
+        mod_reward += 20
     elif reward >= 0.1:
-        mod_reward += 5
+        mod_reward += 10
     elif reward >= 0:
-        mod_reward += 1
+        mod_reward += 5
 
     return mod_reward
 
 def q_learning(env, estimator, n_episode,
                 gamma = 1.0, epsilon = 0.1, epsilon_decay = 0.99
                 ):
-
+    epsilon_initial = epsilon
     for episode in range(n_episode):
         policy = gen_epsilon_greedy_policy(estimator, epsilon, n_action)
         state = env.reset()
@@ -41,9 +41,9 @@ def q_learning(env, estimator, n_episode,
         while not is_done:
             action = policy(state)
             next_state, reward, is_done, _ = env.step(action)
-            total_reward_episode[episode] += reward
 
             modified_reward = modify_reward(next_state[0])
+            total_reward_episode[episode] += reward
             total_mod_reward_episode[episode] += modified_reward
 
             q_values = estimator.predict(state).tolist()
@@ -66,8 +66,10 @@ def q_learning(env, estimator, n_episode,
         ))
 
         epsilon = max(epsilon * epsilon_decay, 0.01)
+        if (episode % 1000) == 1:
+            epsilon = epsilon_initial
 
-n_episode = 1000
+n_episode = 2000
 total_reward_episode = [0] * n_episode
 total_mod_reward_episode = [0] * n_episode
 
@@ -78,7 +80,7 @@ lr = 0.001
 
 dqn = DQN(n_state, n_action, n_hidden, lr)
 
-q_learning(env, dqn, n_episode, gamma=0.99, epsilon=0.3)
+q_learning(env, dqn, n_episode, gamma=0.9, epsilon=0.3)
 
 plt.plot(total_reward_episode)
 plt.xlabel('Episode')
