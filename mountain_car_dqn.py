@@ -66,8 +66,12 @@ def q_learning(env, estimator, n_episode,
         ))
 
         epsilon = max(epsilon * epsilon_decay, 0.01)
+        if (episode % 100 == 1):
+            estimator.print()
+
         if (episode % 1000) == 1:
             epsilon = epsilon_initial
+            
 
 n_episode = 2000
 total_reward_episode = [0] * n_episode
