@@ -53,7 +53,7 @@ model = torch.nn.Sequential(
     torch.nn.Linear(D_in, H),
     torch.nn.ReLU(),
     torch.nn.Linear(H, D_out),
-)
+)#.cuda() # Uncomment this to run on GPU
 
 # The nn package also contains definitions of popular loss functions; in this
 # case we will use Mean Squared Error (MSE) as our loss function.
@@ -63,9 +63,9 @@ loss_fn = torch.nn.MSELoss(reduction='sum')
 learning_rate = 1e-4
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-for t in range(500):
+for t in range(5000):
     # To apply our Function, we use Function.apply method. We alias this as 'relu'.
-    myRelu = MyReLU.apply
+    # myRelu = MyReLU.apply
 
     # Forward pass: compute predicted y
     y_pred = model(x)
