@@ -1,1 +1,9 @@
 __pycache__/
+Atari/cnn_dqn_model.pt
+cnn_dqn_model.pt
+jokes_lstm_model.pt
+Data/Imdb/imdb_master.csv
+Data/Jokes/reddit-cleanjokes.csv
+Data/Jokes_big/reddit_jokes.json
+Data/Jokes_big/stupidstuff.json
+Data/Jokes_big/wocka.json
